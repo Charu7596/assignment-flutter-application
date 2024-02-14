@@ -6,6 +6,14 @@ class Constants {
 
   static String get pm => "PM";
 
+  static String get patientProfile => "Patient Profile";
+
+  static String get labelNumber => "Phone Number*";
+
+  static String get labelName => "Name*";
+
+  static String get appointMentDetails => "Appointment Details";
+
   static String getMonthName(int month) {
     final List<String> monthNames = [
       '',

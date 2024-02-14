@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/appointment_store.dart';
+import 'package:flutter_application_1/views/constants.dart';
 // import 'package:flutter_application_1/controllers/api_calls.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -12,7 +13,7 @@ class PatientProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Patient Profile'),
+        title: Text(Constants.patientProfile),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -21,13 +22,12 @@ class PatientProfile extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 60.0,
-              //backgroundImage: AssetImage('path/to/profile_picture.jpg'),
             ),
             const SizedBox(height: 20.0),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'Name*',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: Constants.labelName,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
                 appointmentStore.setName(value);
@@ -35,9 +35,9 @@ class PatientProfile extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'Phone Number*',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: Constants.labelNumber,
+                border: const OutlineInputBorder(),
               ),
               onChanged: (value) {
                 appointmentStore.setNumber(value);
@@ -61,7 +61,7 @@ class PatientProfile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Appointment Details'),
+                Text(Constants.appointMentDetails),
                 Observer(
                   builder: (_) => Row(
                     children: [
@@ -88,7 +88,7 @@ class PatientProfile extends StatelessWidget {
                     showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
-                      title: const Text('Appointment Details'),
+                      title: Text(Constants.appointMentDetails),
                       content: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,

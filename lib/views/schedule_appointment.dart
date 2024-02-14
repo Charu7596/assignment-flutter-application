@@ -15,6 +15,7 @@ class ScheduleAppointmentScreen extends StatefulWidget {
 
 class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
   final AppointmentStore appointmentStore = AppointmentStore();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,83 +32,94 @@ class _ScheduleAppointmentScreenState extends State<ScheduleAppointmentScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20.0, top: 16.0, right: 20.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Expanded(
-                  child: Text(
-                    'Pick a Date',
-                    style: TextStyle(
-                      fontFamily: 'M3',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 22.0,
-                      color: Color(0xFF006590),
-                    ),
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: Text(
+                          'Pick a Date',
+                          style: TextStyle(
+                            fontFamily: 'M3',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 22.0,
+                            color: Color(0xFF006590),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => _launchCalendar(context),
+                        child: const Icon(
+                          Icons.calendar_today,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                GestureDetector(
-                  onTap: () => _launchCalendar(context),
-                  child: const Icon(
-                    Icons.calendar_today,
-                    color: Colors.black,
+                  HorizontalScrollDates(
+                    onDateSelected: (String month, String date, String day) {
+                      setState(() {
+                        appointmentStore.updateState(
+                          month: month,
+                          date: date,
+                          day: day,
+                        );
+                      });
+                    },
                   ),
-                ),
-              ],
-            ),
-            HorizontalScrollDates(
-              onDateSelected: (String month, String date, String day) {
-                setState(() {
-                  appointmentStore.updateState(
-                    month: month,
-                    date: date,
-                    day: day,
-                  );
-                });
-              },
-            ),
-            const SizedBox(height: 40),
-            DoctorDropdown(
-              onDoctorSelected: (String doctorName) {
-                setState(() {
-                  appointmentStore.selectedDoctor = doctorName;
-                });
-              },
-              onTimeSelected: (String time) {
-                setState(() {
-                  appointmentStore.selectedTime = time;
-                });
-              },
-            ),
-            CircularTimeSlots(
-              availableSlot: 4,
-              time: appointmentStore.selectedTime,
-              onTap: handleCircleTap,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                postPatientData().then((patient) {
-                  print(patient);
-                  if (appointmentStore.selectedDate != '' &&
-                      appointmentStore.selectedDoctor != '' &&
-                      appointmentStore.selectedTime != '' &&
-                      appointmentStore.timeValue != 0) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PatientProfile(
-                                appointmentStore: appointmentStore,
-                              )),
-                    );
-                  }
-                }).catchError((error) {
-                  print('Error fetching patient data: $error');
-                });
-              },
-              child: const Text('Schedule Apointment'),
-            ),
-          ],
-        ),
+                  const SizedBox(height: 40),
+                  DoctorDropdown(
+                    onDoctorSelected: (String doctorName) {
+                      setState(() {
+                        appointmentStore.selectedDoctor = doctorName;
+                      });
+                    },
+                    onTimeSelected: (String time) {
+                      setState(() {
+                        appointmentStore.selectedTime = time;
+                      });
+                    },
+                  ),
+                  CircularTimeSlots(
+                    availableSlot: 4,
+                    time: appointmentStore.selectedTime,
+                    onTap: handleCircleTap,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      postPatientData().then((patient) {
+                        print(patient);
+                        if (appointmentStore.selectedDate != '' &&
+                            appointmentStore.selectedDoctor != '' &&
+                            appointmentStore.selectedTime != '' &&
+                            appointmentStore.timeValue != 0) {
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PatientProfile(
+                                      appointmentStore: appointmentStore,
+                                    )),
+                          );
+                        }
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }).catchError((error) {
+                        print('Error fetching patient data: $error');
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      });
+                    },
+                    child: const Text('Schedule Appointment'),
+                  ),
+                ],
+              ),
       ),
     );
   }

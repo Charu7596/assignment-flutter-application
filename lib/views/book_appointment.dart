@@ -27,17 +27,20 @@ class BookAppointment extends StatelessWidget {
   }
 
   Widget _buildAppointmentWidget() {
-    return FutureBuilder(
-      future: fetchPatientData(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasError) {
-          return Text('Error fetching patient data: ${snapshot.error}');
-        } else {
-          return ScheduleAppointmentScreen();
-        }
-      },
-    );
-  }
+  return FutureBuilder(
+    future: fetchPatientData(),
+    builder: (BuildContext context, AsyncSnapshot snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (snapshot.hasError) {
+        return Text('Error fetching patient data: ${snapshot.error}');
+      } else {
+        return ScheduleAppointmentScreen();
+      }
+    },
+  );
+}
+
 }
