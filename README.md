@@ -1,16 +1,10 @@
-# flutter_application_1
+# assignment_flutter_application
 
-A new Flutter project.
+Doctor Appointment Scheduling App
 
-## Getting Started
+This is a simple app for scheduling doctor appointments. It allows users to select a date, doctor, and time slot for their appointment.
 
-This project is a starting point for a Flutter application.
+Technologies Used
+MVC Design Pattern: The app follows the Model-View-Controller design pattern, separating concerns to improve maintainability and scalability.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+MobX State Management: MobX is used for state management, allowing for reactive updates and easy synchronization between different parts of the app.
